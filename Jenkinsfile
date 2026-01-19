@@ -1,5 +1,5 @@
 pipeline {
-     agent { label 'Jenkins' }
+    agent { label 'Jenkins' }
 
     environment {
         BASE_GIT_URL = "https://github.com/hina123456677"
@@ -10,16 +10,13 @@ pipeline {
         stage('Build Repositories') {
             steps {
                 script {
-                    // Load repos and branch defaults from config files
                     def repos = load 'reposConfig.groovy'
-                    def branchConfig = load 'branchesConfig.groovy'
 
-                    // Loop through all repositories dynamically
                     for (repo in repos) {
                         stage("Build ${repo.name}") {
                             dir(repo.name) {
-                                // Pick branch: Jenkins param override or default from config
-                                def branchToBuild = params[repo.param] ?: branchConfig[repo.param]
+                                // Branch from Jenkins param OR default in repo config
+                                def branchToBuild = params[repo.param] ?: repo.branch
                                 echo "📌 Building ${repo.name} on branch: ${branchToBuild}"
 
                                 git branch: branchToBuild,
