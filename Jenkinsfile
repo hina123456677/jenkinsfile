@@ -1,5 +1,5 @@
 pipeline {
-    agent any
+     agent { label 'Jenkins' }
 
     environment {
         BASE_GIT_URL = "https://github.com/hina123456677"
